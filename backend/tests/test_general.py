@@ -1,3 +1,4 @@
+from requests import request
 from backend.tests import base
 from backend.database import Project, Task
 from backend import schema
@@ -148,12 +149,12 @@ class TestTask(base.BaseTestCase):
 
         response = self.get('/project/<int:project_id>/task/')
         status_code = response.status_code
-        data = reques.json
+        data = request.json
 
         self.assertEqual(200, status_code)
         self.assertTrue(data['success'])
         self.assertIsInstance(data['result'], dict)
-        self.assertEqual(data['result']['created_tasks'], schema.tasks_schema.dump(Task.query.filter_by(created_by_id = test_user.id).all())
+        self.assertEqual(data['result']['created_tasks'], schema.tasks_schema.dump(Task.query.filter_by(created_by_id = test_user.id).all()))
         self.assertEqual(data['message'], "Successfully fetched all tasks.")
         self.logout()
 
