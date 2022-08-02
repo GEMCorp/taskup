@@ -1,3 +1,4 @@
+from asyncio import tasks
 from requests import request
 from backend.tests import base
 from backend.database import Project, Task
@@ -24,7 +25,7 @@ class TestProject(base.BaseTestCase):
         status_code = response.status_code
         data = response.json
 
-        self.assertEqual(200, status_code) #not sure of status code for post
+        self.assertEqual(201, status_code) #edited status code for post
         self.assertTrue(data['success'])
         self.assertEqual(data['message'], "Project edited successfully")
         self.assertIsInstance(data['result'], dict)
@@ -164,7 +165,20 @@ class TestTask(base.BaseTestCase):
         self.assertEqual(data['message'], "Task Successfully Created.")        
         self.logout()
 
-    # def test_get_tasks(self, *args, **kwargs):
+    def test_get_tasks(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user = test_user)
+
+        response = self.get('/task/')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(200, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['result'], schema.tasks_schema.dump(tasks))
+        self.assertEqual(data['message'], "Tasks fetched.")
+
+        self.logout() 
 
     def test_get_tasks_list(self, *args, **kwargs):
         test_user = base.create_random_user()
@@ -172,7 +186,7 @@ class TestTask(base.BaseTestCase):
 
         response = self.get('/project/<int:project_id>/task/')
         status_code = response.status_code
-        data = request.json
+        data = response.json
 
         self.assertEqual(200, status_code)
         self.assertTrue(data['success'])
