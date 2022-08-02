@@ -110,10 +110,25 @@ class TestProject(base.BaseTestCase):
 
         self.logout()
 
+
+    def test_get_contributors_for_task(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user=test_user)
+
+        response = self.post('/project/<int:project_id>/add-contributor/', data={'contributors_ids': "23"})
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(201, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Project found")
+
+        self.logout()
+
+
     #def test_get_invitation(self, *args, **kwargs):
-    #
     #def test_get_contributors_for_project(self, *args, **kwargs):
-    #later define test_get_contributors_to_task(self, *args, **kwargs):
+    
     #def test_get_invitations(self, *args, **kwargs):
     #later define test_decline_invitation(self, *args, **kwargs):
     #later define test_accept_invitation(self, *args, **kwargs):
