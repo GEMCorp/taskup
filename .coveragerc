@@ -1,7 +1,5 @@
 # .coveragerc to control coverage.py
 [run]
 omit =
-    */site-packages/*
-    */distutils/*
-    tests/*
     /usr/lib/python3/dist-packages/*
+    /home/gem/GEM_Stuff/SelfTaught/WORKSPACE/taskup/backend/utils.py

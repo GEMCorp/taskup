@@ -2,7 +2,6 @@ from requests import request
 from backend.tests import base
 from backend.database import Project, Task
 from backend import schema
-
 class TestProject(base.BaseTestCase):
     def test_create_project(self, *args, **kwargs):
         user = base.create_random_user()
@@ -16,6 +15,23 @@ class TestProject(base.BaseTestCase):
         self.assertEqual(data['result']['manager'], schema.UserSchema().dump(user))
         self.logout()
     
+
+    def test_edit_project(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user = test_user)
+
+        response = self.post("/project/<int:project_id>/edit/")
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(200, status_code) #not sure of status code for post
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Project edited successfully")
+        self.assertIsInstance(data['result'], dict)
+        self.assertEqual(data['result']['projects_you_contribute_to'], schema.projects_schema.dump(test_user.projects))
+
+        self.logout()
+
 
     def test_get_projects_list(self, *args, **kwargs):
         user = base.create_random_user()
@@ -79,10 +95,15 @@ class TestProject(base.BaseTestCase):
 
         self.logout()
 
-    #later define test_get_invitation
-    #later define test_decline_invitation
-    #later define test_accept_invitation
-    #later define test_get_contributors_for_project
+    #def test_get_invitation(self, *args, **kwargs):
+    #def test_remove_contributors_from_project(self, *args, **kwargs):
+    #later define test_get_contributors_for_project(self, *args, **kwargs):
+    #later define test_get_contributors_to_task(self, *args, **kwargs):
+    #def test_get_invitations(self, *args, **kwargs):
+    #later define test_decline_invitation(self, *args, **kwargs):
+    #later define test_accept_invitation(self, *args, **kwargs):
+    #test_is_product_manager(self, *args, **kwargs):
+    
 
     def test_delete_project(self, *args, **kwargs):
         user = base.create_random_user()
@@ -142,6 +163,8 @@ class TestTask(base.BaseTestCase):
         self.assertTrue(data['success'])
         self.assertEqual(data['message'], "Task Successfully Created.")        
         self.logout()
+
+    # def test_get_tasks(self, *args, **kwargs):
 
     def test_get_tasks_list(self, *args, **kwargs):
         test_user = base.create_random_user()

@@ -53,7 +53,7 @@ def edit_project(project_id):
 
     return {
         'success': True,
-        'message': "Project created successfully",
+        'message': "Project edited successfully",
         "new_project": project_schema.dump(project),
         "result": {
             'created_projects': projects_schema.dump(Project.query.filter_by(manager_id=g.user.id).all()),
