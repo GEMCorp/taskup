@@ -80,6 +80,20 @@ class TestProject(base.BaseTestCase):
 
         self.logout()
 
+    def test_remove_contributors_from_project(self, *args, **kwargs):
+        user = base.create_random_user()
+        self.login(user=user)
+
+        response = self.post('/project/<int:project_id>/add-contributor/', data={'contributors_ids': "23"})
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(201, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Successfully updated project")
+
+        self.logout()
+
 
     def test_add_contributors_to_project(self, *args, **kwargs):
         user = base.create_random_user()
@@ -97,8 +111,8 @@ class TestProject(base.BaseTestCase):
         self.logout()
 
     #def test_get_invitation(self, *args, **kwargs):
-    #def test_remove_contributors_from_project(self, *args, **kwargs):
-    #later define test_get_contributors_for_project(self, *args, **kwargs):
+    #
+    #def test_get_contributors_for_project(self, *args, **kwargs):
     #later define test_get_contributors_to_task(self, *args, **kwargs):
     #def test_get_invitations(self, *args, **kwargs):
     #later define test_decline_invitation(self, *args, **kwargs):
