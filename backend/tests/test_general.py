@@ -267,12 +267,29 @@ class TestTask(base.BaseTestCase):
         self.assertIsInstance(data['result'], dict)
         self.assertEqual(data['result']['created_tasks'], schema.tasks_schema.dump(Task.query.filter_by(created_by_id = test_user.id).all()))
         self.assertEqual(data['message'], "Successfully fetched all tasks.")
+
         self.logout()
 
     # later write logic for the following
-    # def test_update_task(self, *args, **kwargs): 
-    # def test_delete_task(self, *args, **kwargs):
+
+    def test_update_task(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user = test_user)
+
+        response = self.put('/project/<int:project_id>/task/<int:task_id>')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(200, status_code)# wrong status code
+        self.assertTrue(data['success'])
+        self.assertIsInstance(data['result'], dict)
+        self.assertEqual(data['message'], "Successfully Updated the Task.")
+
+        self.logout()
+"""
+    # def test_delete_task(self, *args, **kwargs):lin502
     # def test_update_task_status(self, *args, **kwargs):
     # def test_update_task_deadline(self, *args, **kwargs):
     # def test_get_task_details(self, *args, **kwargs):
     # def test_create_message(self, *args, **kwargs):
+"""
