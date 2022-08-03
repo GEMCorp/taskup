@@ -172,7 +172,12 @@ class TestProject(base.BaseTestCase):
         self.logout()
 
 
-    #def test_is_product_manager(self, *args, **kwargs):
+    def test_is_product_manager(self, *args, **kwargs):
+        test_project = self.project
+        test_user = self.user
+
+        self.assertTrue(test_project.manager == test_user)
+        self.assert404(test_project.manager == test_user, message= "Permissioon denied")
     
 
     def test_delete_project(self, *args, **kwargs):
