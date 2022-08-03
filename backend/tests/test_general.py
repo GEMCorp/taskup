@@ -157,8 +157,22 @@ class TestProject(base.BaseTestCase):
         self.logout()
 
 
-    #later define test_accept_invitation(self, *args, **kwargs):
-    #test_is_product_manager(self, *args, **kwargs):
+    def test_accept_invitation(self, *args, **kwargs):
+        user = base.create_random_user()
+        self.login(user=user)
+
+        response = self.get('/invitation/<int:invitation_id>/accept/')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(201, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Successully accepted Invitation")
+
+        self.logout()
+
+
+    #def test_is_product_manager(self, *args, **kwargs):
     
 
     def test_delete_project(self, *args, **kwargs):
