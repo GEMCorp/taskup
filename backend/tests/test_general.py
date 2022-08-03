@@ -300,9 +300,22 @@ class TestTask(base.BaseTestCase):
         self.assertEqual(data['message'], "Task Deleted Successfully.")
 
         self.logout()
-
-        
+       
     def test_update_task_status(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user = test_user)
+
+        response = self.put('/project/<int:project_id>/task/<int:task_id>/completion-status/')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(200, status_code)# wrong status code
+        self.assertTrue(data['success'])
+        self.assertIsInstance(data['result'], dict)
+        self.assertEqual(data['message'], "Successfully Updated the Completion Status of task.")
+
+        self.logout()
+       
     # def test_update_task_deadline(self, *args, **kwargs):
     # def test_get_task_details(self, *args, **kwargs):
     # def test_create_message(self, *args, **kwargs):
