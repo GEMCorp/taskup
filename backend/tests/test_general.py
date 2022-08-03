@@ -270,7 +270,6 @@ class TestTask(base.BaseTestCase):
 
         self.logout()
 
-    # later write logic for the following
 
     def test_update_task(self, *args, **kwargs):
         test_user = base.create_random_user()
@@ -286,10 +285,20 @@ class TestTask(base.BaseTestCase):
         self.assertEqual(data['message'], "Successfully Updated the Task.")
 
         self.logout()
-"""
-    # def test_delete_task(self, *args, **kwargs):lin502
+
+    def test_delete_task(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user = test_user)
+
+        response = self.delete('/project/<int:project_id>/task/<int:task_id>/delete/')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(200, status_code)# wrong status code
+        self.assertTrue(data['success'])
+        self.assertIsInstance(data['result'], dict)
+        self.assertEqual(data['message'], "Task Deleted Successfully.")
     # def test_update_task_status(self, *args, **kwargs):
     # def test_update_task_deadline(self, *args, **kwargs):
     # def test_get_task_details(self, *args, **kwargs):
     # def test_create_message(self, *args, **kwargs):
-"""
