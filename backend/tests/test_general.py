@@ -126,10 +126,18 @@ class TestProject(base.BaseTestCase):
         self.logout()
 
 
-    #def test_get_invitation(self, *args, **kwargs):
+    def test_get_invitations(self, *args, **kwargs):
+        test_user = base.create_random_user()
+        self.login(user=test_user)
+
+        response = self.get('/invitation/<int:invitation_id>/decline/')
+        status_code = response.status_code
+        data = response.json
+
+        
     #def test_get_contributors_for_project(self, *args, **kwargs):
     
-    #def test_get_invitations(self, *args, **kwargs):
+   
     #later define test_decline_invitation(self, *args, **kwargs):
     #later define test_accept_invitation(self, *args, **kwargs):
     #test_is_product_manager(self, *args, **kwargs):
