@@ -130,11 +130,17 @@ class TestProject(base.BaseTestCase):
         test_user = base.create_random_user()
         self.login(user=test_user)
 
-        response = self.get('/invitation/<int:invitation_id>/decline/')
+        response = self.get('/invitation/')
         status_code = response.status_code
         data = response.json
 
-        
+        self.assertEqual(204, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Successfully retrieved invitations")
+
+        self.logout()
+
+
     #def test_get_contributors_for_project(self, *args, **kwargs):
     
    
