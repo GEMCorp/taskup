@@ -1,4 +1,5 @@
 from asyncio import tasks
+from urllib import response
 from requests import request
 from backend.tests import base
 from backend.database import Project, Task
@@ -84,7 +85,7 @@ class TestProject(base.BaseTestCase):
         user = base.create_random_user()
         self.login(user=user)
 
-        response = self.post('/project/<int:project_id>/add-contributor/', data={'contributors_ids': "23"})
+        response = self.post("/project/<int:project_id>/remove-contributor/")
         status_code = response.status_code
         data = response.json
 
@@ -99,7 +100,7 @@ class TestProject(base.BaseTestCase):
         user = base.create_random_user()
         self.login(user=user)
 
-        response = self.post('/project/<int:project_id>/add-contributor/', data={'contributors_ids': "23"})
+        response = self.post("/project/<int:project_id>/add-contributor/")
         status_code = response.status_code
         data = response.json
 
@@ -115,7 +116,7 @@ class TestProject(base.BaseTestCase):
         test_user = base.create_random_user()
         self.login(user=test_user)
 
-        response = self.post('/project/<int:project_id>/add-contributor/', data={'contributors_ids': "23"})
+        response = self.get('/project/<int:project_id>/task/<int:task_id>/contributors/')
         status_code = response.status_code
         data = response.json
 
@@ -134,17 +135,28 @@ class TestProject(base.BaseTestCase):
         status_code = response.status_code
         data = response.json
 
-        self.assertEqual(204, status_code)
+        self.assertEqual(201, status_code)
         self.assertTrue(data['success'])
         self.assertEqual(data['message'], "Successfully retrieved invitations")
 
         self.logout()
-
-
-    #def test_get_contributors_for_project(self, *args, **kwargs):
     
    
-    #later define test_decline_invitation(self, *args, **kwargs):
+    def test_decline_invitation(self, *args, **kwargs):
+        user = base.create_random_user()
+        self.login(user=user)
+
+        response = self.get('/invitation/<int:invitation_id>/decline/')
+        status_code = response.status_code
+        data = response.json
+
+        self.assertEqual(201, status_code)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['message'], "Invitation deleted successfully.")
+
+        self.logout()
+
+
     #later define test_accept_invitation(self, *args, **kwargs):
     #test_is_product_manager(self, *args, **kwargs):
     
