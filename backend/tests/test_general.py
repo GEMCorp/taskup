@@ -298,7 +298,11 @@ class TestTask(base.BaseTestCase):
         self.assertTrue(data['success'])
         self.assertIsInstance(data['result'], dict)
         self.assertEqual(data['message'], "Task Deleted Successfully.")
-    # def test_update_task_status(self, *args, **kwargs):
+
+        self.logout()
+
+        
+    def test_update_task_status(self, *args, **kwargs):
     # def test_update_task_deadline(self, *args, **kwargs):
     # def test_get_task_details(self, *args, **kwargs):
     # def test_create_message(self, *args, **kwargs):
