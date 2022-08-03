@@ -1,20 +1,27 @@
 from asyncio import tasks
+from unicodedata import name
 from urllib import response
 from requests import request
-from backend.tests import base
-from backend.database import Project, Task
+from backend.tests import base, HomePageTest
+from backend.database import Project, Task, db_session, User
 from backend import schema
 class TestProject(base.BaseTestCase):
     def test_create_project(self, *args, **kwargs):
-        user = base.create_random_user()
-        self.login(user=user)
-        response = self.post('/project/', data={'name': "Test Project"})
-        data = response.json
+        test_user = base.create_random_user()
+        self.login(user=test_user)
+        HomePageTest.test_login(test_user)
 
+        response = self.post('/project/', data={'name': "Test Project"})
+        testProject = Project(name=name)
+        self.assertEqual(testProject.manager, test_user)
+        db_session.add(testProject)
+        db_session.commit()
+
+        data = response.json
         self.assertTrue(data['success'])
         self.assertIsInstance(data['result'], dict)
         self.assertEqual(data['result']['name'], "Test Project")
-        self.assertEqual(data['result']['manager'], schema.UserSchema().dump(user))
+        self.assertEqual(data['result']['manager'], schema.UserSchema().dump(test_user))
         self.logout()
     
 
