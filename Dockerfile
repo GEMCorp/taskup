@@ -10,8 +10,8 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 
 # Install dependencies
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+COPY devrequirements.txt /code/
+RUN pip install -r devrequirements.txt
 
 # Copy project
 COPY . /code/
