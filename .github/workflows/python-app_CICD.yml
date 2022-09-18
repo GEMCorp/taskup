@@ -34,3 +34,20 @@ jobs:
     - name: Run Tests
       run: |
         python run_tests.py
+        
+  dockerdeploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout code for docker push
+    - uses: mr-smithers-excellent/docker-build-push@v5
+      name: Build & push Docker image
+      with:
+        image: gem58/cicd_deployment_repo
+        dockerfile: Dockerfile
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      
