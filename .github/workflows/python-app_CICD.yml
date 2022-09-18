@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with versions of Python
+# This workflow will install Python dependencies, run tests with versions of Python
 # 
 
 name: Python application CICD
@@ -19,7 +19,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.9, 3.10, ]
+        python-version: [ 3.8, 3.9, ]
 
     steps:
     - uses: actions/checkout@v3
